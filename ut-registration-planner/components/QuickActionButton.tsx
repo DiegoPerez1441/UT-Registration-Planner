@@ -1,18 +1,21 @@
-import React from 'react'
+import React from "react"
 import Button from "@mui/material/Button"
+import Tooltip from "@mui/material/Tooltip"
 
 import styles from "./QuickActionButton.module.scss"
 
 interface QuickActionButtonProps {
-    props?: any
+    tooltip: any
     children?: any
 }
 
-const QuickActionButton = (props: QuickActionButtonProps) => {
+const QuickActionButton = ({ tooltip, children }: QuickActionButtonProps) => {
     return (
-        <Button className={styles.button}>
-            {props.children}
-        </Button>
+        <Tooltip title={tooltip}>
+            <Button className={styles.button}>
+                {children}
+            </Button>
+        </Tooltip>
     )
 }
 

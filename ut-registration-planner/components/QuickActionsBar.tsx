@@ -12,15 +12,17 @@ type Props = {}
 const QuickActionsBar = (props: Props) => {
     return (
         <div className={styles.container}>
-            <QuickActionButton>
+            <QuickActionButton tooltip="Search">
                 <SearchIcon />
             </QuickActionButton>
 
-            <QuickActionButton>RIS</QuickActionButton>
-            <QuickActionButton>
+            <QuickActionButton tooltip="Registration Information Sheet">RIS</QuickActionButton>
+
+            <QuickActionButton tooltip="Waitlist">
                 <FormatListNumberedIcon />
             </QuickActionButton>
-            <QuickActionButton>
+            
+            <QuickActionButton tooltip="Degree Audit">
                 <SchoolIcon />
             </QuickActionButton>
         </div>

@@ -6,4 +6,9 @@
 
     color: white;
     background-color: #bf5700;
+
+    &:hover {
+        // Increased rgb components by 10
+        background-color: #c9610a;
+    }
 }
