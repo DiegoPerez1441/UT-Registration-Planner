@@ -4,6 +4,7 @@ import Image from "next/image"
 import styles from "../styles/Home.module.css"
 
 import CourseCard from "../components/CourseCard"
+import QuickActionsBar from "../components/QuickActionsBar"
 
 interface CourseList {
     name: string
@@ -11,6 +12,7 @@ interface CourseList {
     uid: string
 }
 
+// Example Data
 const courseList: CourseList[] = [
     {
         name: "UT 101",
@@ -46,9 +48,14 @@ const Home: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            {courseList.map((course, index) => {
-                return <CourseCard key={index} course={course} />
-            })}
+            <div className={styles.courseCardsContainer}>
+                {courseList.map((course, index) => {
+                    return <CourseCard key={index} course={course} />
+                })}
+            </div>
+
+            <QuickActionsBar />
+
         </div>
     )
 }
