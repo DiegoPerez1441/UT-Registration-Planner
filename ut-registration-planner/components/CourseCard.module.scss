@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    color: white;
+    background-color: #bf5700;
+
+    &:hover {
+        // Increased rgb components by 10
+        background-color: #c9610a;
+    }
+}
+
+.textContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.h2 {
+    font-size: 1.2rem;
+    margin: 0.2rem;
+}
+
+.p {
+    color: rgb(225, 225, 225);
+
+    font-size: 1rem;
+    margin: 0.2rem;
+}
