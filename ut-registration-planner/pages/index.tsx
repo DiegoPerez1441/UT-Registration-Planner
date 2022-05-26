@@ -5,6 +5,35 @@ import styles from "../styles/Home.module.css"
 
 import CourseCard from "../components/CourseCard"
 
+interface CourseList {
+    name: string
+    professor: string
+    uid: string
+}
+
+const courseList: CourseList[] = [
+    {
+        name: "UT 101",
+        professor: "Example Professor",
+        uid: "00101",
+    },
+    {
+        name: "CH 301",
+        professor: "Example Professor",
+        uid: "00301",
+    },
+    {
+        name: "LA 101",
+        professor: "Example Professor",
+        uid: "00101",
+    },
+    {
+        name: "C S 312",
+        professor: "Example Professor",
+        uid: "00312",
+    },
+]
+
 const Home: NextPage = () => {
     return (
         <div className={styles.container}>
@@ -17,8 +46,9 @@ const Home: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <CourseCard />
-            
+            {courseList.map((course, index) => {
+                return <CourseCard key={index} course={course} />
+            })}
         </div>
     )
 }
