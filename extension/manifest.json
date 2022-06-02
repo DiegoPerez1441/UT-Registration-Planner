@@ -5,5 +5,12 @@
     "manifest_version": 3,
     "action": {
         "default_popup": "index.html"
-    }
+    },
+    "permissions": ["storage"],
+    "content_scripts": [
+        {
+            "matches": ["https://utdirect.utexas.edu/apps/registrar/course_schedule/*"],
+            "js": ["content/lib/jquery-3.6.0.min.js", "content/main.js"]
+        }
+    ]
 }
