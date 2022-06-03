@@ -3,6 +3,7 @@ import Head from "next/head"
 import Image from "next/image"
 import styles from "../styles/Home.module.css"
 
+import Header from "../components/Header"
 import CourseCard from "../components/CourseCard"
 import QuickActionsBar from "../components/QuickActionsBar"
 
@@ -47,6 +48,8 @@ const Home: NextPage = () => {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head> */}
+
+            <Header />
 
             <div className={styles.courseCardsContainer}>
                 {courseList.map((course, index) => {
