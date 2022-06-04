@@ -7,6 +7,9 @@
         "default_popup": "index.html"
     },
     "permissions": ["storage"],
+    "background": {
+        "service_worker": "content/background.js"
+    },
     "content_scripts": [
         {
             "matches": ["https://utdirect.utexas.edu/apps/registrar/course_schedule/*"],
