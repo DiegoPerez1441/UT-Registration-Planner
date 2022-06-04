@@ -18,13 +18,17 @@ interface CourseCardProps {
     course: Course
 }
 
+const truncate = (str: string, n: number): string => {
+    return (str.length > n) ? str.substring(0, n - 1) + "..." : str
+}
+
 const CourseCard = ({ course }: CourseCardProps) => {
     return (
         <Paper elevation={4} className={styles.container}>
             <div className={styles.textContainer}>
                 {/* <h2 className={styles.h2}>UT 101 - Example Professor</h2> */}
                 <h2 className={styles.h2}>
-                    {course.name + " - " + course.professor}
+                    {truncate(course.name + " - " + course.professor, 25)}
                 </h2>
                 <p className={styles.p}>{course.uid}</p>
             </div>
