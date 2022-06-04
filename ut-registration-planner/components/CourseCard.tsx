@@ -5,6 +5,8 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy"
 
 import styles from "./CourseCard.module.scss"
 
+import { getStorage, setStorage } from "../utils/chromeStorage"
+
 // Reused
 interface CourseList {
     name: string
@@ -26,7 +28,13 @@ const CourseCard = ({ course }: CourseCardProps) => {
                 </h2>
                 <p className={styles.p}>{course.uid}</p>
             </div>
-            <ContentCopyIcon />
+            <ContentCopyIcon onClick={async () => {
+                try {
+                    await setStorage({ storageTestItem: `Hello World from Chrome Storage. Key: ${course.name}`})
+                } catch (error) {
+                    console.warn(error)
+                }
+            }}/>
         </Paper>
     )
 }

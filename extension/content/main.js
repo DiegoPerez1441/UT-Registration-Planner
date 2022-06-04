@@ -7,4 +7,8 @@
 //   console.log("Value currently is " + result.key);
 // });
 
+chrome.storage.sync.set({ storageTestItem: "Test item set in main.js" }, () => {
+    console.log("Value is set to \"Test item set in main.js\"")
+})
+
 $("td[data-th='Unique']").children("a").css("color", "#bf5700");
