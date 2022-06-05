@@ -3,6 +3,17 @@
 ## About
 UT Registration Planner is a Chrome Extension designed to improve the course registration process at The University of Texas at Austin.
 
+### Table of Contents
+- [Built With](#built-with)
+- [Getting Started](#getting-started)
+- [Standards and Guidelines](standards-and-guidelines)
+- [Next.js](#nextjs)
+    - [Prerequisites](#prerequisites)
+    - [Recommended Workflow](#recommended-workflow)
+    - [Installation and Running Dev Server](#installation-and-running-dev-server)
+- [Chrome Extension](#chrome-extension)
+    - [Recommended Workflow](#recommended-workflow-1)
+    - [Important!](#important)
 
 ## Built With
 * Next.js
@@ -10,7 +21,6 @@ UT Registration Planner is a Chrome Extension designed to improve the course reg
 * JavaScript
 * Sass/SCSS
 * Material UI
-
 
 ## Getting Started
 UT Registration Planner is composed of 2 main sections. The Next.js and Chrome Extension folder.
@@ -21,6 +31,7 @@ In order for UT Registration Planner to maintain a clean and organized codebase,
 
 > Note: You will need to select which code formatter VS Code wants to use (It will prompt you to choose).
 
+---
 
 ## Next.js
 
@@ -46,6 +57,7 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+---
 
 ## Chrome Extension
 
