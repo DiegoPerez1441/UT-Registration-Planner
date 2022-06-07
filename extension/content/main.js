@@ -27,6 +27,11 @@ let courseListArray = [
         professor: "Example Professor 2",
         uid: "002"
     },
+    {
+        name: "Course 3",
+        professor: "Example Professor 3",
+        uid: "003"
+    }
 ]
 
 chrome.storage.sync.set({ userCourseList: courseListArray }, () => {
