@@ -16,26 +16,28 @@ $("td[data-th='Unique']").children("a").css("color", "#bf5700")
 
 
 // Prefill the user course list with example courses
-let courseListArray = [
-    {
-        name: "Course 1",
-        professor: "Example Professor 1",
-        uid: "001"
-    },
-    {
-        name: "Course 2",
-        professor: "Example Professor 2",
-        uid: "002"
-    },
-    {
-        name: "Course 3",
-        professor: "Example Professor 3",
-        uid: "003"
-    }
-]
+// let courseListArray = [
+//     {
+//         name: "Course 1",
+//         professor: "Example Professor 1",
+//         uid: "001"
+//     },
+//     {
+//         name: "Course 2",
+//         professor: "Example Professor 2",
+//         uid: "002"
+//     },
+//     {
+//         name: "Course 3",
+//         professor: "Example Professor 3",
+//         uid: "003"
+//     }
+// ]
 
-chrome.storage.sync.set({ userCourseList: courseListArray }, () => {
-    console.log("Successfully added courseListArray to Chrome Storage.")
+let courseListArray = []
+
+chrome.storage.sync.get(["userCourseList"], (data) => {
+    // courseListArray = data["userCourseList"]
 })
 
 $("tr").find(".course_header h2").click(function() {
@@ -61,6 +63,8 @@ $("tr").find(".course_header h2").click(function() {
     // Check for duplicates
     // Set to chrome storage
     // This resets everytime the page is refreshed or loaded (overwrites old data)
-    chrome.storage.sync.set({userCourseList: courseListArray})
+    chrome.storage.sync.set({ userCourseList: courseListArray }, () => {
+        console.log("Successfully added courseListArray to Chrome Storage.")
+    })
 
 })
