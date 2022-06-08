@@ -9,9 +9,12 @@ import { getStorage, setStorage } from "../utils/chromeStorage"
 
 // Reused
 interface Course {
-    name: string
-    professor: string
-    uid: string
+    name: string,
+    fullName: string,
+    instructor: string,
+    uid: number,
+    status: string,
+    // time: time
 }
 
 interface CourseCardProps {
@@ -28,7 +31,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
             <div className={styles.textContainer}>
                 {/* <h2 className={styles.h2}>UT 101 - Example Professor</h2> */}
                 <h2 className={styles.h2}>
-                    {truncate(course.name + " - " + course.professor, 25)}
+                    {truncate(course.name + " - " + course.instructor, 25)}
                 </h2>
                 <p className={styles.p}>{course.uid}</p>
             </div>
