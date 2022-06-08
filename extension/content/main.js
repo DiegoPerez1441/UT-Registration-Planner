@@ -68,3 +68,15 @@ $("tr").find(".course_header h2").click(function() {
     })
 
 })
+
+// Append "UTRP" at the end of every course row
+$(".rwd-table").find("tr").each(function () {
+    if (!($(this).find("td").hasClass(("course_header")))) {
+        if (!($(this).parent("thead").length)) {
+            $(this).append(`<td class="utrp-button" style="color: #bf5700">UTRP</td>`)
+        } else {
+            // Add table header for UTRP button
+            $(this).append(`<th scope="col"></th>`)
+        }
+    }
+})
