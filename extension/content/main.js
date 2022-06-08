@@ -69,14 +69,54 @@ $("tr").find(".course_header h2").click(function() {
 
 })
 
+const getCourseText = (row, className) => {
+    let element = $(row).find(className).text()
+    let info = $.trim(element)
+
+    if (info === "") {
+        return "n/a"
+    } else {
+        return info
+    }
+}
+
+const separateCourseFullText = (text) => {
+    return {
+        name: "n/a",
+        fullName: "n/a"
+    }
+}
+
+const parseCourseInfo = (row) => {
+    let {
+        name,
+        fullName
+    } = separateCourseFullText()
+
+    let course = {
+        name: name,
+        fullName: fullName,
+        instructor: getCourseText(row, "td[data-th='Instructor']"),
+        uid: getCourseText(row, "td[data-th='Unique']"),
+        status: getCourseText(row, "td[data-th='Status']"),
+        // time: time
+    }
+    console.log(course)
+}
+
 // Append "UTRP" at the end of every course row
 $(".rwd-table").find("tr").each(function () {
     if (!($(this).find("td").hasClass(("course_header")))) {
         if (!($(this).parent("thead").length)) {
-            $(this).append(`<td class="utrp-button" style="color: #bf5700">UTRP</td>`)
+            $(this).append(`<td class="UTRP_button" style="color: #bf5700">UTRP</td>`)
         } else {
             // Add table header for UTRP button
-            $(this).append(`<th scope="col"></th>`)
+            $(this).append(`<th scope="col">UTRP</th>`)
         }
     }
+})
+
+$(".UTRP_button").click(function () {
+    let courseRow = $(this).closest("tr")
+    parseCourseInfo(courseRow)
 })
