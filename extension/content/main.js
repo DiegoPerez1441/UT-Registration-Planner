@@ -1,73 +1,64 @@
-// Sample chrome.storage.sync use
-// chrome.storage.sync.set({ key: value }, function () {
-//   console.log("Value is set to " + value);
-// });
+// Reads all data out of storage.sync and exposes it via a promise.
+//
+// Note: Once the Storage API gains promise support, this function
+// can be greatly simplified.
+const getStorage = async (key) => {
+    // Immediately return a promise and start asynchronous work
+    return new Promise((resolve, reject) => {
+        // Asynchronously fetch all data from storage.sync.
+        chrome.storage.sync.get([key], (data) => {
+            // Pass any observed errors down the promise chain.
+            if (chrome.runtime.lastError) {
+                return reject(chrome.runtime.lastError)
+            }
+            // Pass the data retrieved from storage down the promise chain.
+            resolve(data[key])
+        })
+    })
+}
 
-// chrome.storage.sync.get(["key"], function (result) {
-//   console.log("Value currently is " + result.key);
-// });
+// kv = {key: value}
+const setStorage = async (kv) => {
+    return new Promise((resolve, reject) => {
+        chrome.storage.sync.set(kv, () => {
+            if (chrome.runtime.lastError) {
+                return reject(chrome.runtime.lastError)
+            }
 
-// chrome.storage.sync.set({ storageTestItem: "Test item set in main.js" }, () => {
-//     console.log("Value is set to \"Test item set in main.js\"")
-// })
+            resolve(kv)
+        })
+    })
+}
 
-// Color course uid text to a "burnt orange" color
-$("td[data-th='Unique']").children("a").css("color", "#bf5700")
-
-
-// Prefill the user course list with example courses
-// let courseListArray = [
-//     {
-//         name: "Course 1",
-//         professor: "Example Professor 1",
-//         uid: "001"
-//     },
-//     {
-//         name: "Course 2",
-//         professor: "Example Professor 2",
-//         uid: "002"
-//     },
-//     {
-//         name: "Course 3",
-//         professor: "Example Professor 3",
-//         uid: "003"
-//     }
-// ]
 
 let courseListArray = []
 
-chrome.storage.sync.get(["userCourseList"], (data) => {
-    // courseListArray = data["userCourseList"]
-})
+const objInArray = (obj, arr, property) => {
+    const result = arr.some((element) => {
+        if (element[property] === obj[property]) {
+            return true
+        }
 
-$("tr").find(".course_header h2").click(function() {
-    // console.log(this.innerText)
+        return false
+    })
 
-    let courseName = this.innerText
+    return result
+}
 
-    let course = {
-        name: courseName,
-        professor: "Example Professor",
-        uid: "uid"
-    }
-
-    if (!courseListArray.includes(course)) {
-        courseListArray.push(course)
-        console.log(course)
-    } else {
-        // break out of function early
+const addCourseToStorage = async(course) => {
+    if (objInArray(course, courseListArray, "uid")) {
+        console.log(`${course.name} already in your course list.`)
         return
     }
 
-    // Get course info
-    // Check for duplicates
-    // Set to chrome storage
-    // This resets everytime the page is refreshed or loaded (overwrites old data)
-    chrome.storage.sync.set({ userCourseList: courseListArray }, () => {
-        console.log("Successfully added courseListArray to Chrome Storage.")
-    })
+    courseListArray.push(course)
+    try {
+        await setStorage({ userCourseList: courseListArray })
+    } catch (error) {
+        console.warn(error)
+    }
 
-})
+}
 
 const getCourseText = (row, className) => {
     let element = $(row).find(className).text()
@@ -97,7 +88,7 @@ const parseCourseInfo = (row) => {
 
     // Replace double space in name bug with single space
     courseFullName = courseNameRow.text().replace(/\s\s/, " ")
-    console.log(courseFullName)
+    // console.log(courseFullName)
 
     let {
         name,
@@ -108,12 +99,17 @@ const parseCourseInfo = (row) => {
         name: name,
         fullName: fullName,
         instructor: getCourseText(row, "td[data-th='Instructor']"),
-        uid: getCourseText(row, "td[data-th='Unique']"),
+        uid: Number(getCourseText(row, "td[data-th='Unique']")),
         status: getCourseText(row, "td[data-th='Status']"),
         // time: time
     }
-    console.log(course)
+
+    addCourseToStorage(course)
+    // console.log(course)
 }
+
+// Color course uid text to a "burnt orange" color
+$("td[data-th='Unique']").children("a").css("color", "#bf5700")
 
 // Append "UTRP" at the end of every course row
 $(".rwd-table").find("tr").each(function () {
