@@ -47,7 +47,7 @@ const objInArray = (obj, arr, property) => {
 
 const addCourseToStorage = async(course) => {
     if (objInArray(course, courseListArray, "uid")) {
-        console.log(`${course.name} already in your course list.`)
+        console.log(`[${course.uid}]${course.name} already in your course list.`)
         return
     }
 
