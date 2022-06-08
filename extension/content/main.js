@@ -81,9 +81,13 @@ const getCourseText = (row, className) => {
 }
 
 const separateCourseFullText = (text) => {
+    let courseFullName = text
+    let courseSubject = text.match(/.+?\d{3}[^ ]?/)
+    let courseName = text - courseSubject
+
     return {
-        name: "n/a",
-        fullName: "n/a"
+        name: courseSubject[0],
+        fullName: courseFullName
     }
 }
 
@@ -91,7 +95,7 @@ const parseCourseInfo = (row) => {
     let {
         name,
         fullName
-    } = separateCourseFullText()
+    } = separateCourseFullText("C S 312 INTRODUCTION TO PROGRAMMING")
 
     let course = {
         name: name,
