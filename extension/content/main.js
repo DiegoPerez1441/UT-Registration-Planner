@@ -92,10 +92,17 @@ const separateCourseFullText = (text) => {
 }
 
 const parseCourseInfo = (row) => {
+
+    courseNameRow = $(row).prevAll().find(".course_header h2").last()
+
+    // Replace double space in name bug with single space
+    courseFullName = courseNameRow.text().replace(/\s\s/, " ")
+    console.log(courseFullName)
+
     let {
         name,
         fullName
-    } = separateCourseFullText("C S 312 INTRODUCTION TO PROGRAMMING")
+    } = separateCourseFullText(courseFullName)
 
     let course = {
         name: name,
