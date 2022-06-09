@@ -133,10 +133,37 @@ const courseDateTimeConflict = (obj1, obj2) => {
         // days: obj1.regular.days.split(/M|T(?!H)|W|(TH)|F/),
         days: obj1.regular.days.match(/M|T(?!H)|W|(TH)|F/g),
         // time: obj1.regular.hour.split(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp].[Mm].))/)
+        time: parseDT(obj1.regular)
     }
 
-    console.log(obj1.regular.days)
-    console.log(dt_obj1.days)
+    let dt_obj2 = {
+        days: obj2.regular.days.match(/M|T(?!H)|W|(TH)|F/g),
+        time: parseDT(obj2.regular)
+    }
+
+    for (d1 in dt_obj1.days) {
+        for (d2 in dt_obj2.days) {
+            if (d1 !== d2) {
+                continue 
+            } else {
+                let a = dt_obj1.time[0]
+                let b = dt_obj1.time[1]
+                let c = dt_obj2.time[0]
+                let d = dt_obj2.time[1]
+
+                if (b > c || d > a) {
+                    return true
+                }
+
+            }
+        }
+    }
+
+    // If no course conflicts were found return false
+    return false
+
+    // console.log(obj1.regular.days)
+    // console.log(dt_obj1.days)
 }
 
 const buildCourseTimeObject = (row) => {
