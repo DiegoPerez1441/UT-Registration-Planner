@@ -82,6 +82,37 @@ const separateCourseFullText = (text) => {
     }
 }
 
+const buildCourseTimeObject = (row) => {
+
+    let time_obj = {}
+    const numDays = $(row).find("td[data-th='Days']").children().length > 2
+
+    if (numDays) {
+        time_obj = {
+            regular: {
+                days: getCourseText(row, "td[data-th='Days'] span:first-child"),
+                hour: getCourseText(row, "td[data-th='Hour'] span:first-child"),
+                room: getCourseText(row, "td[data-th='Room'] span:first-child")
+            },
+            additional: {
+                days: getCourseText(row, "td[data-th='Days'] span.second-row"),
+                hour: getCourseText(row, "td[data-th='Hour'] span.second-row"),
+                room: getCourseText(row, "td[data-th='Room'] span.second-row")
+            }
+        }
+    } else {
+        time_obj = {
+            regular: {
+                days: getCourseText(row, "td[data-th='Days'] span:first-child"),
+                hour: getCourseText(row, "td[data-th='Hour'] span:first-child"),
+                room: getCourseText(row, "td[data-th='Room'] span:first-child")
+            }
+        }
+    }
+
+    return time_obj
+}
+
 const parseCourseInfo = (row) => {
 
     courseNameRow = $(row).prevAll().find(".course_header h2").last()
@@ -95,13 +126,17 @@ const parseCourseInfo = (row) => {
         fullName
     } = separateCourseFullText(courseFullName)
 
+    let time_obj = buildCourseTimeObject(row)
+    console.log(time_obj)
+
     let course = {
+        uid: Number(getCourseText(row, "td[data-th='Unique']")),
         name: name,
         fullName: fullName,
+        time: time_obj,
+        mode: getCourseText(row, "td[data-th='Instruction Mode']"),
         instructor: getCourseText(row, "td[data-th='Instructor']"),
-        uid: Number(getCourseText(row, "td[data-th='Unique']")),
         status: getCourseText(row, "td[data-th='Status']"),
-        // time: time
     }
 
     addCourseToStorage(course)
