@@ -82,6 +82,50 @@ const separateCourseFullText = (text) => {
     }
 }
 
+const buildCourseTimeObject = (row) => {
+
+    let time_obj = {}
+    const multipleDates = $(row).find("td[data-th='Days']").children().length > 2
+
+    if (multipleDates) {
+        time_obj = {
+            regular: {
+                days: getCourseText(row, "td[data-th='Days'] span:first-child"),
+                hour: getCourseText(row, "td[data-th='Hour'] span:first-child"),
+                room: getCourseText(row, "td[data-th='Room'] span:first-child")
+            },
+            additional: {
+                days: getCourseText(row, "td[data-th='Days'] span.second-row"),
+                hour: getCourseText(row, "td[data-th='Hour'] span.second-row"),
+                room: getCourseText(row, "td[data-th='Room'] span.second-row")
+            }
+        }
+    } else {
+        time_obj = {
+            regular: {
+                days: getCourseText(row, "td[data-th='Days'] span:first-child"),
+                hour: getCourseText(row, "td[data-th='Hour'] span:first-child"),
+                room: getCourseText(row, "td[data-th='Room'] span:first-child")
+            }
+        }
+    }
+
+    return time_obj
+}
+
+const buildCourseInstructorsArray = (row) => {
+    let instructors = []
+
+    const multipleInstructors = $(row).find("td[data-th='Instructor']").children().length > 2
+
+    instructors.push(getCourseText(row, "td[data-th='Instructor'] span:first-child"))
+    if (multipleInstructors) {
+        instructors.push(getCourseText(row, "td[data-th='Instructor'] span.second-row"))
+    }
+
+    return instructors
+}
+
 const parseCourseInfo = (row) => {
 
     courseNameRow = $(row).prevAll().find(".course_header h2").last()
@@ -96,12 +140,13 @@ const parseCourseInfo = (row) => {
     } = separateCourseFullText(courseFullName)
 
     let course = {
+        uid: Number(getCourseText(row, "td[data-th='Unique']")),
         name: name,
         fullName: fullName,
-        instructor: getCourseText(row, "td[data-th='Instructor']"),
-        uid: Number(getCourseText(row, "td[data-th='Unique']")),
+        time: buildCourseTimeObject(row),
+        mode: getCourseText(row, "td[data-th='Instruction Mode']"),
+        instructor: buildCourseInstructorsArray(row),
         status: getCourseText(row, "td[data-th='Status']"),
-        // time: time
     }
 
     addCourseToStorage(course)
