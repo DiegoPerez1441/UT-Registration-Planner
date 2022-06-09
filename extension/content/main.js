@@ -103,7 +103,7 @@ const separateCourseFullText = (text) => {
     }
 }
 
-// Convert Date Time to 48 Hour Interval
+// Convert Date Time to 0-48 interval value
 const convertDTTo48HI = (dt_obj) => {
 
     let hour = dt_obj.time.split(/:/)[0]
@@ -111,14 +111,18 @@ const convertDTTo48HI = (dt_obj) => {
 
     let val = 0
 
-    // [Note]: Check lower and uppercase
-    if (dt_obj.timeOfDay == "a.m.") {
-        val = Number(hour) * 2
+    if (dt_obj.timeOfDay === "a.m.") {
+        // 12 am edge-case
+        if (hour === "12") {
+            val = 0
+            val += (Number(minute) == 30) ? 1 : 0
+        } else {
+            val = Number(hour) * 2
+            val += (Number(minute) == 30) ? 1 : 0
+        }
+    } else if (dt_obj.timeOfDay === "p.m.") {
+        val = ((Number(hour) % 12) + 12) * 2
         val += (Number(minute) == 30) ? 1 : 0
-    } else if (dt_obj.timeOfDay == "p.m.") {
-        val = Number(hour) * 2
-        val += (Number(minute) == 30) ? 1 : 0
-        val += 24
     } else {
         // Catch errors
         console.warn("Error in converting DT to 48 hour inverval.")
@@ -180,12 +184,7 @@ const courseDateTimeConflict = (obj1, obj2) => {
     }
 
     // If no course conflicts were found return false
-    console.log(dt_obj1)
-    console.log(dt_obj2)
     return false
-
-    // console.log(obj1.regular.days)
-    // console.log(dt_obj1.days)
 }
 
 const buildCourseTimeObject = (row) => {
