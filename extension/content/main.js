@@ -82,6 +82,61 @@ const separateCourseFullText = (text) => {
     }
 }
 
+// Convert Date Time to 48 Hour Interval
+const convertDTTo48HI = (dt_obj) => {
+
+    let hour = dt_obj.time.split(/:/)[0]
+    let minute = dt_obj.time.split(/:/)[1]
+
+    let val = 0
+
+    // [Note]: Check lower and uppercase
+    if (dt_obj.timeOfDay == "a.m.") {
+        val = Number(hour) * 2
+        val += (Number(minute) == 30) ? 1 : 0
+    } else if (dt_obj.timeOfDay == "p.m.") {
+        val = Number(hour) * 2
+        val += (Number(minute) == 30) ? 1 : 0
+        val += 24
+    } else {
+        // Catch errors
+        console.warn("Error in converting DT to 48 hour inverval.")
+    }
+
+    return val
+}
+
+// Parse Date Time
+const parseDT = (text) => {
+    let l_text = text
+    const t1 = l_text.split(/-/)[0]
+    const t2 = l_text.split(/-/)[1]
+
+    const t1_attr = {
+        timeOfDay: t1.match(/([AaPp].[Mm].)/)[0],
+        time: t1.replace(/\s([AaPp].[Mm].)/, "")
+    }
+
+    const t2_attr = {
+        timeOfDay: t2.match(/([AaPp].[Mm].)/)[0],
+        time: t2.replace(/\s([AaPp].[Mm].)/, "")
+    }
+
+    let start = convertDTTo48HI(t1_attr)
+    let end = convertDTTo48HI(t2_attr)
+
+    return [start, end]
+}
+
+const courseDateTimeConflict = (obj1, obj2) => {
+    let dt_obj1 = {
+        days: obj1.regular.days.split(/M|T(?!H)|W|(TH)|F/),
+        time: obj1.regular.hour.split(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp].[Mm].))/)
+    }
+
+    console.log(dt_obj1)
+}
+
 const buildCourseTimeObject = (row) => {
 
     let time_obj = {}
@@ -109,6 +164,9 @@ const buildCourseTimeObject = (row) => {
             }
         }
     }
+
+    let tmp = parseDT(time_obj.regular.hour)
+    console.log(tmp)
 
     return time_obj
 }
