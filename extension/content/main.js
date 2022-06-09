@@ -118,9 +118,9 @@ const buildCourseInstructorsArray = (row) => {
 
     const multipleInstructors = $(row).find("td[data-th='Instructor']").children().length > 2
 
-    instructors.push(getCourseText(row, "td[data-th='Instructor span:first-child']"))
+    instructors.push(getCourseText(row, "td[data-th='Instructor'] span:first-child"))
     if (multipleInstructors) {
-        instructors.push(getCourseText(row, "td[data-th='Instructor span.second-row']"))
+        instructors.push(getCourseText(row, "td[data-th='Instructor'] span.second-row"))
     }
 
     return instructors
