@@ -7,14 +7,27 @@ import styles from "./CourseCard.module.scss"
 
 import { getStorage, setStorage } from "../utils/chromeStorage"
 
+interface CourseDateTimeObj {
+    regular: {
+        days: string
+        hour: string
+        room: string
+    }
+    additional?: {
+        days: string
+        hour: string
+        room: string
+    }
+}
+
 // Reused
 interface Course {
-    name: string,
-    fullName: string,
-    instructor: string[],
-    uid: number,
-    status: string,
-    // time: time
+    name: string
+    fullName: string
+    instructor: string[]
+    uid: number
+    status: string
+    time: CourseDateTimeObj
 }
 
 interface CourseCardProps {
