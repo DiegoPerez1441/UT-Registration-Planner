@@ -130,11 +130,13 @@ const parseDT = (text) => {
 
 const courseDateTimeConflict = (obj1, obj2) => {
     let dt_obj1 = {
-        days: obj1.regular.days.split(/M|T(?!H)|W|(TH)|F/),
-        time: obj1.regular.hour.split(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp].[Mm].))/)
+        // days: obj1.regular.days.split(/M|T(?!H)|W|(TH)|F/),
+        days: obj1.regular.days.match(/M|T(?!H)|W|(TH)|F/g),
+        // time: obj1.regular.hour.split(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp].[Mm].))/)
     }
 
-    console.log(dt_obj1)
+    console.log(obj1.regular.days)
+    console.log(dt_obj1.days)
 }
 
 const buildCourseTimeObject = (row) => {
@@ -165,8 +167,10 @@ const buildCourseTimeObject = (row) => {
         }
     }
 
-    let tmp = parseDT(time_obj.regular.hour)
-    console.log(tmp)
+    // let tmp = parseDT(time_obj.regular.hour)
+    // console.log(tmp)
+
+    courseDateTimeConflict(time_obj)
 
     return time_obj
 }
