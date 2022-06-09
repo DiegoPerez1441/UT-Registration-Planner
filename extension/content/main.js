@@ -286,7 +286,6 @@ const highlightCourseConflicts = (row) => {
     c1_timeObj = c1.time
 
     if (c1_timeObj.regular.days.includes("n/a") || c1_timeObj.regular.days == "n/a") {
-        // row.find("span").css("color", "blue")
         return
     }
 
@@ -298,16 +297,28 @@ const highlightCourseConflicts = (row) => {
         }
 
         if (c2.uid == c1.uid) {
-            row.find("span").css("color", "green")
+            row.find("td[data-th='Days']").css("color", "green")
+            row.find("td[data-th='Hour']").css("color", "green")
+            row.find("td[data-th='Room']").css("color", "green")
+            row.find("td[data-th='Instruction Mode']").css("color", "green")
+            row.find("td[data-th='Instructor']").css("color", "green")
+            row.find("td[data-th='Status']").css("color", "green")
+            row.find("td[data-th='Core']").css("color", "green")
             continue
         }
 
         // Get every course on the screen
         if (courseDateTimeConflict(c1_timeObj, c2_timeObj)) {
-            row.find("span").css("color", "red")
-            console.log(`Course Conflict between ${c1_timeObj.regular.hour} and ${c2_timeObj.regular.hour}`)
+            row.find("td[data-th='Days']").css("color", "red")
+            row.find("td[data-th='Hour']").css("color", "red")
+            row.find("td[data-th='Room']").css("color", "red")
+            row.find("td[data-th='Instruction Mode']").css("color", "red")
+            row.find("td[data-th='Instructor']").css("color", "red")
+            row.find("td[data-th='Status']").css("color", "red")
+            row.find("td[data-th='Core']").css("color", "red")
+            // console.log(`Course Conflict between ${c1_timeObj.regular.hour} and ${c2_timeObj.regular.hour}`)
         } else {
-            console.log(`No Course Conflict between ${c1_timeObj.regular.hour} and ${c2_timeObj.regular.hour}`)
+            // console.log(`No Course Conflict between ${c1_timeObj.regular.hour} and ${c2_timeObj.regular.hour}`)
         }
 
     }
