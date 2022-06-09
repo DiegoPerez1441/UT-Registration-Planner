@@ -50,6 +50,8 @@ let courseListArray = [
     }
 ]
 
+courseListArray = []
+
 setStorage({ userCourseList: courseListArray })
 
 const objInArray = (obj, arr, property) => {
@@ -149,9 +151,7 @@ const parseDT = (text) => {
 
 const courseDateTimeConflict = (obj1, obj2) => {
     let dt_obj1 = {
-        // days: obj1.regular.days.split(/M|T(?!H)|W|(TH)|F/),
         days: obj1.regular.days.match(/M|T(?!H)|W|(TH)|F/g),
-        // time: obj1.regular.hour.split(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp].[Mm].))/)
         time: parseDT(obj1.regular.hour)
     }
 
@@ -160,8 +160,8 @@ const courseDateTimeConflict = (obj1, obj2) => {
         time: parseDT(obj2.regular.hour)
     }
 
-    for (d1 in dt_obj1.days) {
-        for (d2 in dt_obj2.days) {
+    for (let d1 of dt_obj1.days) {
+        for (let d2 of dt_obj2.days) {
             if (d1 !== d2) {
                 continue 
             } else {
@@ -169,6 +169,7 @@ const courseDateTimeConflict = (obj1, obj2) => {
                 let b = dt_obj1.time[1]
                 let c = dt_obj2.time[0]
                 let d = dt_obj2.time[1]
+                // console.log(`d1[${a},${b}] d2[${c},${d}]`)
 
                 if ((b > c) && (d > a)) {
                     return true
@@ -179,6 +180,8 @@ const courseDateTimeConflict = (obj1, obj2) => {
     }
 
     // If no course conflicts were found return false
+    console.log(dt_obj1)
+    console.log(dt_obj2)
     return false
 
     // console.log(obj1.regular.days)
@@ -253,7 +256,7 @@ const parseCourseInfo = (row) => {
     }
 
     addCourseToStorage(course)
-    console.log(course)
+    // console.log(course)
 }
 
 const buildCourseObject = (row) => {
@@ -282,16 +285,16 @@ const buildCourseObject = (row) => {
 }
 
 const highlightCourseConflicts = (row) => {
-    c1 = buildCourseObject(row)
-    c1_timeObj = c1.time
+    let c1 = buildCourseObject(row)
+    let c1_timeObj = c1.time
 
     if (c1_timeObj.regular.days.includes("n/a") || c1_timeObj.regular.days == "n/a") {
         return
     }
 
     for (let course of courseListArray) {
-        c2 = course
-        c2_timeObj = c2.time
+        let c2 = course
+        let c2_timeObj = c2.time
         if (c2_timeObj.regular.days.includes("n/a") || c2_timeObj.regular.days == "n/a") {
             continue
         }
@@ -316,13 +319,42 @@ const highlightCourseConflicts = (row) => {
             row.find("td[data-th='Instructor']").css("color", "red")
             row.find("td[data-th='Status']").css("color", "red")
             row.find("td[data-th='Core']").css("color", "red")
-            // console.log(`Course Conflict between ${c1_timeObj.regular.hour} and ${c2_timeObj.regular.hour}`)
+            console.warn(`Course Conflict between: \n[${c1.uid}] ${c1_timeObj.regular.hour} and \n[${c2.uid}] ${c2_timeObj.regular.hour}`)
         } else {
-            // console.log(`No Course Conflict between ${c1_timeObj.regular.hour} and ${c2_timeObj.regular.hour}`)
+            // console.log(`[${c1.uid}] ${c1_timeObj.regular.hour}`)
+            // console.log(`[${c2.uid}] ${c2_timeObj.regular.hour}`)
+            console.log(`No Course Conflict between: \n[${c1.uid}] ${c1_timeObj.regular.hour} and \n[${c2.uid}] ${c2_timeObj.regular.hour}`)
         }
 
     }
 }
+
+const updateHighlightCourseConflicts = () => {
+    $(".rwd-table").find("tr").each(function () {
+        if (!($(this).find("td").hasClass(("course_header")))) {
+            if (!($(this).parent("thead").length)) {
+                highlightCourseConflicts($(this))
+            }
+        }
+    })
+}
+
+chrome.storage.onChanged.addListener((changes) => {
+    console.log(changes)
+
+    const getUserCourseList = async () => {
+        try {
+            courseListArray = await getStorage("userCourseList")
+            await updateHighlightCourseConflicts()
+            // console.log("courseListArray was updated.")
+        } catch (error) {
+            console.warn(error)
+        }
+    }
+    getUserCourseList()
+    // updateHighlightCourseConflicts()
+
+})
 
 // Color course uid text to a "burnt orange" color
 $("td[data-th='Unique']").children("a").css("color", "#bf5700")
