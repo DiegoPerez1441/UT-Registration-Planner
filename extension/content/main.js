@@ -31,7 +31,26 @@ const setStorage = async (kv) => {
 }
 
 
-let courseListArray = []
+// Example courseListArray
+let courseListArray = [
+    {
+        uid: 52365,
+        name: "C S 105C",
+        fullName: "C S 105C COMPUTER PROGRAMMING: C++",
+        time: {
+            regular: {
+                days: 'W', 
+                hour: '10:00 a.m.-11:00 a.m.', 
+                room: 'WAG 214'
+            }
+        },
+        mode: "Face-to-Face",
+        instructor: ["PALACIOS, JOAQUIN M"],
+        status: "open; reserved",
+    }
+]
+
+setStorage({ userCourseList: courseListArray })
 
 const objInArray = (obj, arr, property) => {
     const result = arr.some((element) => {
@@ -108,7 +127,7 @@ const convertDTTo48HI = (dt_obj) => {
 
 // Parse Date Time
 const parseDT = (text) => {
-    let l_text = text
+    let l_text = text.toString()
     const t1 = l_text.split(/-/)[0]
     const t2 = l_text.split(/-/)[1]
 
@@ -133,12 +152,12 @@ const courseDateTimeConflict = (obj1, obj2) => {
         // days: obj1.regular.days.split(/M|T(?!H)|W|(TH)|F/),
         days: obj1.regular.days.match(/M|T(?!H)|W|(TH)|F/g),
         // time: obj1.regular.hour.split(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp].[Mm].))/)
-        time: parseDT(obj1.regular)
+        time: parseDT(obj1.regular.hour)
     }
 
     let dt_obj2 = {
         days: obj2.regular.days.match(/M|T(?!H)|W|(TH)|F/g),
-        time: parseDT(obj2.regular)
+        time: parseDT(obj2.regular.hour)
     }
 
     for (d1 in dt_obj1.days) {
@@ -151,7 +170,7 @@ const courseDateTimeConflict = (obj1, obj2) => {
                 let c = dt_obj2.time[0]
                 let d = dt_obj2.time[1]
 
-                if (b > c || d > a) {
+                if ((b > c) && (d > a)) {
                     return true
                 }
 
@@ -194,11 +213,6 @@ const buildCourseTimeObject = (row) => {
         }
     }
 
-    // let tmp = parseDT(time_obj.regular.hour)
-    // console.log(tmp)
-
-    courseDateTimeConflict(time_obj)
-
     return time_obj
 }
 
@@ -239,7 +253,33 @@ const parseCourseInfo = (row) => {
     }
 
     addCourseToStorage(course)
-    // console.log(course)
+    console.log(course)
+}
+
+const highlightCourseConflicts = (row) => {
+    c1 = buildCourseTimeObject(row)
+
+    if (c1.regular.days.includes("n/a") || c1.regular.days == "n/a") {
+        row.find("span").css("color", "blue")
+        return
+    }
+
+    for (let course of courseListArray) {
+        c2 = course.time
+        if (c2.regular.days.includes("n/a") || c2.regular.days == "n/a") {
+            continue
+        }
+
+        // Get every course on the screen
+        if (courseDateTimeConflict(c1, c2)) {
+            row.find("span").css("color", "red")
+            console.log(`Course Conflict between ${c1.regular.hour} and ${c2.regular.hour}`)
+        } else {
+            row.find("span").css("color", "green")
+            console.log(`No Course Conflict between ${c1.regular.hour} and ${c2.regular.hour}`)
+        }
+
+    }
 }
 
 // Color course uid text to a "burnt orange" color
@@ -250,6 +290,7 @@ $(".rwd-table").find("tr").each(function () {
     if (!($(this).find("td").hasClass(("course_header")))) {
         if (!($(this).parent("thead").length)) {
             $(this).append(`<td class="UTRP_button" style="color: #bf5700">UTRP</td>`)
+            highlightCourseConflicts($(this))
         } else {
             // Add table header for UTRP button
             $(this).append(`<th scope="col">UTRP</th>`)
