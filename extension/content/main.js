@@ -85,9 +85,9 @@ const separateCourseFullText = (text) => {
 const buildCourseTimeObject = (row) => {
 
     let time_obj = {}
-    const numDays = $(row).find("td[data-th='Days']").children().length > 2
+    const multipleDates = $(row).find("td[data-th='Days']").children().length > 2
 
-    if (numDays) {
+    if (multipleDates) {
         time_obj = {
             regular: {
                 days: getCourseText(row, "td[data-th='Days'] span:first-child"),
@@ -113,6 +113,19 @@ const buildCourseTimeObject = (row) => {
     return time_obj
 }
 
+const buildCourseInstructorsArray = (row) => {
+    let instructors = []
+
+    const multipleInstructors = $(row).find("td[data-th='Instructor']").children().length > 2
+
+    instructors.push(getCourseText(row, "td[data-th='Instructor span:first-child']"))
+    if (multipleInstructors) {
+        instructors.push(getCourseText(row, "td[data-th='Instructor span.second-row']"))
+    }
+
+    return instructors
+}
+
 const parseCourseInfo = (row) => {
 
     courseNameRow = $(row).prevAll().find(".course_header h2").last()
@@ -126,16 +139,13 @@ const parseCourseInfo = (row) => {
         fullName
     } = separateCourseFullText(courseFullName)
 
-    let time_obj = buildCourseTimeObject(row)
-    console.log(time_obj)
-
     let course = {
         uid: Number(getCourseText(row, "td[data-th='Unique']")),
         name: name,
         fullName: fullName,
-        time: time_obj,
+        time: buildCourseTimeObject(row),
         mode: getCourseText(row, "td[data-th='Instruction Mode']"),
-        instructor: getCourseText(row, "td[data-th='Instructor']"),
+        instructor: buildCourseInstructorsArray(row),
         status: getCourseText(row, "td[data-th='Status']"),
     }
 
