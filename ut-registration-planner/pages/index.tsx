@@ -11,36 +11,6 @@ import QuickActionsBar from "../components/QuickActionsBar"
 
 import { getStorage, setStorage } from "../utils/chromeStorage"
 
-interface CourseList {
-    name: string
-    professor: string
-    uid: string
-}
-
-// Example Data
-const courseList: CourseList[] = [
-    {
-        name: "UT 101",
-        professor: "Example Professor",
-        uid: "00101",
-    },
-    {
-        name: "CH 301",
-        professor: "Example Professor",
-        uid: "00301",
-    },
-    {
-        name: "LA 101",
-        professor: "Example Professor",
-        uid: "00101",
-    },
-    {
-        name: "C S 312",
-        professor: "Example Professor",
-        uid: "00312",
-    },
-]
-
 const Home: NextPage = () => {
 
     const [userCourseList, setUserCourseList] = useState([])
