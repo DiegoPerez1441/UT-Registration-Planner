@@ -256,27 +256,58 @@ const parseCourseInfo = (row) => {
     console.log(course)
 }
 
-const highlightCourseConflicts = (row) => {
-    c1 = buildCourseTimeObject(row)
+const buildCourseObject = (row) => {
+    courseNameRow = $(row).prevAll().find(".course_header h2").last()
 
-    if (c1.regular.days.includes("n/a") || c1.regular.days == "n/a") {
-        row.find("span").css("color", "blue")
+    // Replace double space in name bug with single space
+    courseFullName = courseNameRow.text().replace(/\s\s/, " ")
+    // console.log(courseFullName)
+
+    let {
+        name,
+        fullName
+    } = separateCourseFullText(courseFullName)
+
+    let course = {
+        uid: Number(getCourseText(row, "td[data-th='Unique']")),
+        name: name,
+        fullName: fullName,
+        time: buildCourseTimeObject(row),
+        mode: getCourseText(row, "td[data-th='Instruction Mode']"),
+        instructor: buildCourseInstructorsArray(row),
+        status: getCourseText(row, "td[data-th='Status']"),
+    }
+
+    return course
+}
+
+const highlightCourseConflicts = (row) => {
+    c1 = buildCourseObject(row)
+    c1_timeObj = c1.time
+
+    if (c1_timeObj.regular.days.includes("n/a") || c1_timeObj.regular.days == "n/a") {
+        // row.find("span").css("color", "blue")
         return
     }
 
     for (let course of courseListArray) {
-        c2 = course.time
-        if (c2.regular.days.includes("n/a") || c2.regular.days == "n/a") {
+        c2 = course
+        c2_timeObj = c2.time
+        if (c2_timeObj.regular.days.includes("n/a") || c2_timeObj.regular.days == "n/a") {
+            continue
+        }
+
+        if (c2.uid == c1.uid) {
+            row.find("span").css("color", "green")
             continue
         }
 
         // Get every course on the screen
-        if (courseDateTimeConflict(c1, c2)) {
+        if (courseDateTimeConflict(c1_timeObj, c2_timeObj)) {
             row.find("span").css("color", "red")
-            console.log(`Course Conflict between ${c1.regular.hour} and ${c2.regular.hour}`)
+            console.log(`Course Conflict between ${c1_timeObj.regular.hour} and ${c2_timeObj.regular.hour}`)
         } else {
-            row.find("span").css("color", "green")
-            console.log(`No Course Conflict between ${c1.regular.hour} and ${c2.regular.hour}`)
+            console.log(`No Course Conflict between ${c1_timeObj.regular.hour} and ${c2_timeObj.regular.hour}`)
         }
 
     }
