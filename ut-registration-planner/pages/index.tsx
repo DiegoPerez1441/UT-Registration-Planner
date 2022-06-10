@@ -11,6 +11,84 @@ import QuickActionsBar from "../components/QuickActionsBar"
 
 import { getStorage, setStorage } from "../utils/chromeStorage"
 
+let courseListArray = [
+    {
+        uid: 52365,
+        name: "C S 105C",
+        fullName: "C S 105C COMPUTER PROGRAMMING: C++",
+        time: {
+            regular: {
+                days: 'W', 
+                hour: '10:00 a.m.-11:00 a.m.', 
+                room: 'WAG 214'
+            }
+        },
+        mode: "Face-to-Face",
+        instructor: ["PALACIOS, JOAQUIN M"],
+        status: "open; reserved",
+    },
+    {
+        uid: 52365,
+        name: "C S 105C",
+        fullName: "C S 105C COMPUTER PROGRAMMING: C++",
+        time: {
+            regular: {
+                days: 'W', 
+                hour: '10:00 a.m.-11:00 a.m.', 
+                room: 'WAG 214'
+            }
+        },
+        mode: "Face-to-Face",
+        instructor: ["PALACIOS, JOAQUIN M"],
+        status: "open; reserved",
+    },
+    {
+        uid: 52365,
+        name: "C S 105C",
+        fullName: "C S 105C COMPUTER PROGRAMMING: C++",
+        time: {
+            regular: {
+                days: 'W', 
+                hour: '10:00 a.m.-11:00 a.m.', 
+                room: 'WAG 214'
+            }
+        },
+        mode: "Face-to-Face",
+        instructor: ["PALACIOS, JOAQUIN M"],
+        status: "open; reserved",
+    },
+    {
+        uid: 52365,
+        name: "C S 105C",
+        fullName: "C S 105C COMPUTER PROGRAMMING: C++",
+        time: {
+            regular: {
+                days: 'W', 
+                hour: '10:00 a.m.-11:00 a.m.', 
+                room: 'WAG 214'
+            }
+        },
+        mode: "Face-to-Face",
+        instructor: ["PALACIOS, JOAQUIN M"],
+        status: "open; reserved",
+    },
+    {
+        uid: 52365,
+        name: "C S 105C",
+        fullName: "C S 105C COMPUTER PROGRAMMING: C++",
+        time: {
+            regular: {
+                days: 'W', 
+                hour: '10:00 a.m.-11:00 a.m.', 
+                room: 'WAG 214'
+            }
+        },
+        mode: "Face-to-Face",
+        instructor: ["PALACIOS, JOAQUIN M"],
+        status: "open; reserved",
+    }
+]
+
 const Home: NextPage = () => {
     const [userCourseList, setUserCourseList] = useState([])
 
@@ -41,7 +119,7 @@ const Home: NextPage = () => {
             <Header />
 
             <div className={styles.courseCardsContainer}>
-                {userCourseList.map((course, index) => {
+                {courseListArray.map((course, index) => {
                     return <CourseCard key={index} course={course} />
                 })}
             </div>
