@@ -3,21 +3,18 @@ import Head from "next/head"
 import Image from "next/image"
 import styles from "../styles/Home.module.css"
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
 import Header from "../components/Header"
 import CourseCard from "../components/CourseCard"
-
 import QuickActionsBar from "../components/QuickActionsBar"
 
 import { getStorage, setStorage } from "../utils/chromeStorage"
 
 const Home: NextPage = () => {
-
     const [userCourseList, setUserCourseList] = useState([])
 
     useEffect(() => {
-
         const getUserCourseList = async () => {
             try {
                 const l_userCourseList = await getStorage("userCourseList")
@@ -27,9 +24,7 @@ const Home: NextPage = () => {
                 console.warn(error)
             }
         }
-
         getUserCourseList()
-
     })
 
     return (
