@@ -85,9 +85,10 @@ const courseDateTimeConflictArr = (course, arr) => {
     return false
 }
 
-const addCourseToStorage = async(course) => {
+const addCourseToStorage = async (course) => {
     if (objInArray(course, courseListArray, "uid")) {
-        console.log(`[${course.uid}]${course.name} already in your course list.`)
+        // console.log(`[${course.uid}]${course.name} already in your course list.`)
+        console.warn(`[Course List Error]: The course with uid: ${course.uid} (${course.name}) is already in your course list.`)
         return
     }
 
