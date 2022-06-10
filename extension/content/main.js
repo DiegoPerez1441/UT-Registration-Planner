@@ -183,7 +183,7 @@ const courseDateTimeConflict = (obj1, obj2) => {
         }
     }
 
-    // If no course conflicts were found return false
+    // If no course conflicts were found, return false
     return false
 }
 
@@ -231,6 +231,24 @@ const buildCourseInstructorsArray = (row) => {
     return instructors
 }
 
+const courseDateTimeConflictArr = (course, arr) => {
+    let c1 = course
+    let c1_timeObj = c1.time
+    for (let c2 of arr) {
+        let c2_timeObj = c2.time
+
+        if (courseDateTimeConflict(c1_timeObj, c2_timeObj)) {
+            // Add error message of a course date/time conflict
+            return true
+        } else {
+            continue
+        }
+    }
+
+    // If no course conflicts found between the course and course list (arr), return false
+    return false
+}
+
 const parseCourseInfo = (row) => {
 
     courseNameRow = $(row).prevAll().find(".course_header h2").last()
@@ -254,8 +272,12 @@ const parseCourseInfo = (row) => {
         status: getCourseText(row, "td[data-th='Status']"),
     }
 
-    addCourseToStorage(course)
-    // console.log(course)
+    if (!courseDateTimeConflictArr(course, courseListArray)) {
+        addCourseToStorage(course)
+        // console.log(course)
+    } else {
+        console.warn(`[Date/Time Course Conflict Error]: Couldn't add course with uid: ${course.uid}.`)
+    }
 }
 
 const buildCourseObject = (row) => {
