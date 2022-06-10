@@ -66,9 +66,32 @@ const objInArray = (obj, arr, property) => {
     return result
 }
 
+const courseDateTimeConflictArr = (course, arr) => {
+    let c1 = course
+    let c1_timeObj = c1.time
+    for (let c2 of arr) {
+        let c2_timeObj = c2.time
+
+        if (courseDateTimeConflict(c1_timeObj, c2_timeObj)) {
+            // Add error message of a course date/time conflict
+            console.warn(`[Date/Time Course Conflict Error]: Couldn't add course with uid: ${c1.uid}.`)
+            return true
+        } else {
+            continue
+        }
+    }
+
+    // If no course conflicts found between the course and course list (arr), return false
+    return false
+}
+
 const addCourseToStorage = async(course) => {
     if (objInArray(course, courseListArray, "uid")) {
         console.log(`[${course.uid}]${course.name} already in your course list.`)
+        return
+    }
+
+    if (courseDateTimeConflictArr(course, courseListArray)) {
         return
     }
 
@@ -231,24 +254,6 @@ const buildCourseInstructorsArray = (row) => {
     return instructors
 }
 
-const courseDateTimeConflictArr = (course, arr) => {
-    let c1 = course
-    let c1_timeObj = c1.time
-    for (let c2 of arr) {
-        let c2_timeObj = c2.time
-
-        if (courseDateTimeConflict(c1_timeObj, c2_timeObj)) {
-            // Add error message of a course date/time conflict
-            return true
-        } else {
-            continue
-        }
-    }
-
-    // If no course conflicts found between the course and course list (arr), return false
-    return false
-}
-
 const parseCourseInfo = (row) => {
 
     courseNameRow = $(row).prevAll().find(".course_header h2").last()
@@ -272,12 +277,8 @@ const parseCourseInfo = (row) => {
         status: getCourseText(row, "td[data-th='Status']"),
     }
 
-    if (!courseDateTimeConflictArr(course, courseListArray)) {
-        addCourseToStorage(course)
-        // console.log(course)
-    } else {
-        console.warn(`[Date/Time Course Conflict Error]: Couldn't add course with uid: ${course.uid}.`)
-    }
+    addCourseToStorage(course)
+    // console.log(course)
 }
 
 const buildCourseObject = (row) => {
