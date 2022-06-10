@@ -340,11 +340,11 @@ const highlightCourseConflicts = (row) => {
             row.find("td[data-th='Instructor']").css("color", "red")
             row.find("td[data-th='Status']").css("color", "red")
             row.find("td[data-th='Core']").css("color", "red")
-            console.warn(`Course Conflict between: \n[${c1.uid}] ${c1_timeObj.regular.hour} and \n[${c2.uid}] ${c2_timeObj.regular.hour}`)
+            // console.warn(`Course Conflict between: \n[${c1.uid}] ${c1_timeObj.regular.hour} and \n[${c2.uid}] ${c2_timeObj.regular.hour}`)
         } else {
             // console.log(`[${c1.uid}] ${c1_timeObj.regular.hour}`)
             // console.log(`[${c2.uid}] ${c2_timeObj.regular.hour}`)
-            console.log(`No Course Conflict between: \n[${c1.uid}] ${c1_timeObj.regular.hour} and \n[${c2.uid}] ${c2_timeObj.regular.hour}`)
+            // console.log(`No Course Conflict between: \n[${c1.uid}] ${c1_timeObj.regular.hour} and \n[${c2.uid}] ${c2_timeObj.regular.hour}`)
         }
 
     }
