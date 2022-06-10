@@ -1,15 +1,18 @@
 .button {
-    
+    display: flex;
+    flex-direction: row;
+
     font-size: 1rem;
     font-weight: bold;
-    
-    min-width: 3rem;
+
+    min-width: 3.5rem;
     aspect-ratio: 1;
     border-radius: 14px;
 
     color: white;
+    background-color: #A34900;
 
     &:hover {
-        background-color: #A34900;
+        background-color: #7A3700;
     }
 }

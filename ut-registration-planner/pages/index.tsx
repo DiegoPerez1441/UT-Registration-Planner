@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 
 import Header from "../components/Header"
 import CourseCard from "../components/CourseCard"
+
 import QuickActionsBar from "../components/QuickActionsBar"
 
 import { getStorage, setStorage } from "../utils/chromeStorage"
