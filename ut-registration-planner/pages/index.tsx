@@ -116,7 +116,7 @@ const Home: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head> */}
 
-            <Header />
+            <Header courseList={courseListArray}/>
 
             <div className={styles.courseCardsContainer}>
                 {courseListArray.map((course, index) => {
