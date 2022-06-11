@@ -71,10 +71,17 @@
     }
 }
 
-
 .expandedViewContainer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 
-    align-items: flex-start;
+    align-items: center;
+}
+
+.deleteIcon {
+    margin-right: 7px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
