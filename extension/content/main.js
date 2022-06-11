@@ -307,6 +307,16 @@ const buildCourseObject = (row) => {
     return course
 }
 
+const clearHighlightCourseConflicts = (row) => {
+    row.find("td[data-th='Days']").css("color", "#333")
+    row.find("td[data-th='Hour']").css("color", "#333")
+    row.find("td[data-th='Room']").css("color", "#333")
+    row.find("td[data-th='Instruction Mode']").css("color", "#333")
+    row.find("td[data-th='Instructor']").css("color", "#333")
+    row.find("td[data-th='Status']").css("color", "#333")
+    row.find("td[data-th='Core']").css("color", "#333")
+}
+
 const highlightCourseConflicts = (row) => {
     let c1 = buildCourseObject(row)
     let c1_timeObj = c1.time
@@ -356,6 +366,7 @@ const updateHighlightCourseConflicts = () => {
     $(".rwd-table").find("tr").each(function () {
         if (!($(this).find("td").hasClass(("course_header")))) {
             if (!($(this).parent("thead").length)) {
+                clearHighlightCourseConflicts($(this))
                 highlightCourseConflicts($(this))
             }
         }
