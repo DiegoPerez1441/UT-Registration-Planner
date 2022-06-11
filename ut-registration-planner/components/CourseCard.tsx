@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Paper from "@mui/material/Paper"
 import ContentCopyIcon from "@mui/icons-material/ContentCopy"
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import Collapse from '@mui/material/Collapse'
 
 import styles from "./CourseCard.module.scss"
 
@@ -65,13 +66,13 @@ const CourseCard = ({ course }: CourseCardProps) => {
                 <ExpandMoreIcon className={courseCardExpanded ? styles.expandMoreIconExpanded : styles.expandMoreIconCollapsed} onClick={handleCourseCardOnClick}/>
             </div>
 
-            {courseCardExpanded && (
+            <Collapse in={courseCardExpanded}>
                 <div className={styles.expandedViewContainer}>
                     <p className={styles.p}>{course.status}</p>
                     <p className={styles.p}>{`${course.time.regular.days} | ${course.time.regular.hour} | ${course.time.regular.room}`}</p>
                     {/* <p className={styles.p}>{`${course.time.regular.days} | ${course.time.regular.hour} | ${course.time.regular.room}`}</p> */}
                 </div>
-            )}
+            </Collapse>
         </Paper>
     )
 }
