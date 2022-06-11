@@ -5,6 +5,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Collapse from '@mui/material/Collapse'
 
+import { getStorage, setStorage } from "../utils/chromeStorage"
+
 import styles from "./CourseCard.module.scss"
 
 interface CourseDateTimeObj {
@@ -54,6 +56,24 @@ const CourseCard = ({ course }: CourseCardProps) => {
         setCourseCardExpanded(!courseCardExpanded)
     }
 
+    const deleteCourse = async () => {
+        try {
+            let l_userCourseList = await getStorage("userCourseList")
+            let n_userCourseList = l_userCourseList.filter((c: Course) => {
+                return c.uid !== course.uid
+            })
+
+            try {
+                setStorage({ userCourseList: n_userCourseList })
+            } catch (error) {
+                console.warn(error)
+            }
+
+        } catch (error) {
+            console.warn(error)
+        }
+    }
+
     return (
         <Paper elevation={4} className={styles.container}>
             <div className={styles.summaryViewContainer}>
@@ -69,7 +89,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
 
             <Collapse in={courseCardExpanded}>
                 <div className={styles.expandedViewContainer}>
-                    <DeleteIcon className={styles.deleteIcon}/>
+                    <DeleteIcon className={styles.deleteIcon} onClick={deleteCourse}/>
                     <div className={styles.textContainer}>
                         <p className={styles.p}>{course.status}</p>
                         <p className={styles.p}>{`${course.time.regular.days} | ${course.time.regular.hour} | ${course.time.regular.room}`}</p>
