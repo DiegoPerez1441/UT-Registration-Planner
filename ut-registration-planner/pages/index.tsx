@@ -11,22 +11,8 @@ import QuickActionsBar from "../components/QuickActionsBar"
 
 import { getStorage, setStorage } from "../utils/chromeStorage"
 
+// Example courseListArray
 let courseListArray = [
-    {
-        uid: 52365,
-        name: "C S 105C",
-        fullName: "C S 105C COMPUTER PROGRAMMING: C++",
-        time: {
-            regular: {
-                days: 'W', 
-                hour: '10:00 a.m.-11:00 a.m.', 
-                room: 'WAG 214'
-            }
-        },
-        mode: "Face-to-Face",
-        instructor: ["PALACIOS, JOAQUIN M"],
-        status: "open; reserved",
-    },
     {
         uid: 52365,
         name: "C S 105C",
@@ -103,7 +89,7 @@ const Home: NextPage = () => {
             }
         }
         getUserCourseList()
-    })
+    }, [userCourseList])
 
     return (
         <div className={styles.container}>
@@ -116,10 +102,10 @@ const Home: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head> */}
 
-            <Header courseList={courseListArray}/>
+            <Header courseList={userCourseList}/>
 
             <div className={styles.courseCardsContainer}>
-                {courseListArray.map((course, index) => {
+                {userCourseList.map((course, index) => {
                     return <CourseCard key={index} course={course} />
                 })}
             </div>
