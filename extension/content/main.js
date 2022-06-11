@@ -32,27 +32,25 @@ const setStorage = async (kv) => {
 
 
 // Example courseListArray
-let courseListArray = [
-    {
-        uid: 52365,
-        name: "C S 105C",
-        fullName: "C S 105C COMPUTER PROGRAMMING: C++",
-        time: {
-            regular: {
-                days: 'W', 
-                hour: '10:00 a.m.-11:00 a.m.', 
-                room: 'WAG 214'
-            }
-        },
-        mode: "Face-to-Face",
-        instructor: ["PALACIOS, JOAQUIN M"],
-        status: "open; reserved",
-    }
-]
+// let courseListArray = [
+//     {
+//         uid: 52365,
+//         name: "C S 105C",
+//         fullName: "C S 105C COMPUTER PROGRAMMING: C++",
+//         time: {
+//             regular: {
+//                 days: 'W', 
+//                 hour: '10:00 a.m.-11:00 a.m.', 
+//                 room: 'WAG 214'
+//             }
+//         },
+//         mode: "Face-to-Face",
+//         instructor: ["PALACIOS, JOAQUIN M"],
+//         status: "open; reserved",
+//     }
+// ]
 
-courseListArray = []
-
-setStorage({ userCourseList: courseListArray })
+let courseListArray = []
 
 const objInArray = (obj, arr, property) => {
     const result = arr.some((element) => {
@@ -373,6 +371,38 @@ const updateHighlightCourseConflicts = () => {
     })
 }
 
+// Color course uid text to a "burnt orange" color
+$("td[data-th='Unique']").children("a").css("color", "#bf5700")
+
+// Append "UTRP" at the end of every course row
+$(".rwd-table").find("tr").each(function () {
+    if (!($(this).find("td").hasClass(("course_header")))) {
+        if (!($(this).parent("thead").length)) {
+            $(this).append(`<td class="UTRP_button" style="color: #bf5700">UTRP</td>`)
+            // highlightCourseConflicts($(this))
+        } else {
+            // Add table header for UTRP button
+            $(this).append(`<th scope="col">UTRP</th>`)
+        }
+    }
+})
+
+const initUserCourseList = async () => {
+    try {
+        courseListArray = await getStorage("userCourseList")
+        updateHighlightCourseConflicts()
+        // console.log("Init storage successful.")
+    } catch (error) {
+        console.warn(error)
+    }
+}
+initUserCourseList()
+
+$(".UTRP_button").click(function () {
+    let courseRow = $(this).closest("tr")
+    parseCourseInfo(courseRow)
+})
+
 chrome.storage.onChanged.addListener((changes) => {
     console.log(changes)
 
@@ -386,27 +416,5 @@ chrome.storage.onChanged.addListener((changes) => {
         }
     }
     getUserCourseList()
-    // updateHighlightCourseConflicts()
 
-})
-
-// Color course uid text to a "burnt orange" color
-$("td[data-th='Unique']").children("a").css("color", "#bf5700")
-
-// Append "UTRP" at the end of every course row
-$(".rwd-table").find("tr").each(function () {
-    if (!($(this).find("td").hasClass(("course_header")))) {
-        if (!($(this).parent("thead").length)) {
-            $(this).append(`<td class="UTRP_button" style="color: #bf5700">UTRP</td>`)
-            highlightCourseConflicts($(this))
-        } else {
-            // Add table header for UTRP button
-            $(this).append(`<th scope="col">UTRP</th>`)
-        }
-    }
-})
-
-$(".UTRP_button").click(function () {
-    let courseRow = $(this).closest("tr")
-    parseCourseInfo(courseRow)
 })
