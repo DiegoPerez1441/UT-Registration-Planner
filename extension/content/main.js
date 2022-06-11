@@ -368,7 +368,7 @@ chrome.storage.onChanged.addListener((changes) => {
     const getUserCourseList = async () => {
         try {
             courseListArray = await getStorage("userCourseList")
-            await updateHighlightCourseConflicts()
+            updateHighlightCourseConflicts()
             // console.log("courseListArray was updated.")
         } catch (error) {
             console.warn(error)
