@@ -74,6 +74,9 @@ const Header = ({ courseList }: Props) => {
         setAnchorEl(event.currentTarget)
     }
     const handleClose = () => {
+        setAnchorEl(null)
+    }
+    const handleDeleteCourseListClick = (event: React.MouseEvent<HTMLElement>) => {
         deleteUserCourseList()
         setAnchorEl(null)
     }
@@ -111,7 +114,7 @@ const Header = ({ courseList }: Props) => {
                     },
                 }}
             >
-                <MenuItem onClick={handleClose} className={styles.menuItem}>
+                <MenuItem onClick={handleDeleteCourseListClick} className={styles.menuItem}>
                     <DeleteIcon className={styles.menuItemIcon}/>
                     <p>Delete Course List</p>
                 </MenuItem>
