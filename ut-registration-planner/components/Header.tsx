@@ -48,6 +48,8 @@ const Header = ({ courseList }: Props) => {
     const deleteUserCourseList = async () => {
         try {
             await setStorage({ userCourseList: [] })
+            setUserCourseList([])
+            // Update CourseCard transition group
         } catch (error) {
             console.warn(error)
         }

@@ -33,16 +33,17 @@ interface Course {
 
 interface CourseCardProps {
     course: Course
+    removeCourse: (c_uid: Number) => void
 }
 
 const truncate = (str: string, n: number): string => {
     return (str.length > n) ? str.substring(0, n - 1) + "..." : str
 }
 
-const CourseCard = ({ course }: CourseCardProps) => {
+const CourseCard = ({ course, removeCourse }: CourseCardProps) => {
 
-    const [instructorsText, setInstructorsText] = useState("")
-    const [courseCardExpanded, setCourseCardExpanded] = useState(false)
+    const [instructorsText, setInstructorsText] = useState<string>("")
+    const [courseCardExpanded, setCourseCardExpanded] = useState<boolean>(false)
 
     useEffect(() => {
         if (course.instructor.length > 1) {
@@ -50,13 +51,14 @@ const CourseCard = ({ course }: CourseCardProps) => {
         } else if (course.instructor.length == 1) {
             setInstructorsText(course.instructor[0])
         }
-    }, [])
+    }, [course])
 
     const handleCourseCardOnClick = () => {
         setCourseCardExpanded(!courseCardExpanded)
     }
 
     const deleteCourse = async () => {
+        removeCourse(course.uid)
         try {
             let l_userCourseList = await getStorage("userCourseList")
             let n_userCourseList = l_userCourseList.filter((c: Course) => {
@@ -64,7 +66,9 @@ const CourseCard = ({ course }: CourseCardProps) => {
             })
 
             try {
-                setStorage({ userCourseList: n_userCourseList })
+                await setStorage({ userCourseList: n_userCourseList })
+                console.log("ran deleteCourse()")
+                // setCourseCardExpanded(false)
             } catch (error) {
                 console.warn(error)
             }

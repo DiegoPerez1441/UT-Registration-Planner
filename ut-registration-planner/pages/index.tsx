@@ -9,7 +9,32 @@ import Header from "../components/Header"
 import CourseCard from "../components/CourseCard"
 import QuickActionsBar from "../components/QuickActionsBar"
 
+import Collapse from "@mui/material/Collapse"
+import { TransitionGroup } from "react-transition-group"
+
 import { getStorage, setStorage } from "../utils/chromeStorage"
+
+interface CourseDateTimeObj {
+    regular: {
+        days: string
+        hour: string
+        room: string
+    }
+    additional?: {
+        days: string
+        hour: string
+        room: string
+    }
+}
+
+interface Course {
+    name: string
+    fullName: string
+    instructor: string[]
+    uid: number
+    status: string
+    time: CourseDateTimeObj
+}
 
 // Example courseListArray
 let courseListArray = [
@@ -76,12 +101,17 @@ let courseListArray = [
 ]
 
 const Home: NextPage = () => {
-    const [userCourseList, setUserCourseList] = useState([])
+    const [userCourseList, setUserCourseList] = useState<Course[]>([])
+
+    const removeCourse = (c_uid: Number) => {
+        setUserCourseList(userCourseList.filter(c => c.uid !== c_uid))
+        console.log("removeCourse()")
+    }
 
     useEffect(() => {
         const getUserCourseList = async () => {
             try {
-                const l_userCourseList = await getStorage("userCourseList")
+                const l_userCourseList: Course[] = await getStorage("userCourseList")
                 setUserCourseList(l_userCourseList)
                 // console.log(userCourseList)
             } catch (error) {
@@ -89,7 +119,12 @@ const Home: NextPage = () => {
             }
         }
         getUserCourseList()
-    }, [userCourseList])
+
+        // When userCourseList is put in the [], it causes this component to re-render infinitely
+        console.log("useEffect, []")
+
+        // How to update this component when courses are added?
+    }, [])
 
     return (
         <div className={styles.container}>
@@ -105,9 +140,15 @@ const Home: NextPage = () => {
             <Header courseList={userCourseList}/>
 
             <div className={styles.courseCardsContainer}>
-                {userCourseList.map((course, index) => {
-                    return <CourseCard key={index} course={course} />
-                })}
+
+                <TransitionGroup enter={false}>
+                    {userCourseList.map((course, index) => (
+                        <Collapse key={`collapse-${course.uid}-wrapper`}>
+                            <CourseCard key={course.uid} course={course} removeCourse={removeCourse}/>
+                        </Collapse>
+                    ))}
+                </TransitionGroup>
+
             </div>
 
             <QuickActionsBar />
